@@ -1,0 +1,13 @@
+{%  extends 'base.html.twig' %}
+
+{% block title %}Blog index!{% endblock %}
+
+{% block body %}
+    {% for id, post in posts %}
+        {#      in order to create a link to the specific post    #}
+        {#      we just need to pass route name and required parameters   #}
+        <p><a href="{{ path('blog_show', {'id': id}) }}">ID {{ id }}</a></p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.text }}</p>
+    {% endfor %}
+{% endblock %}
