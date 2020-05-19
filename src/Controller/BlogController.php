@@ -66,6 +66,7 @@ class BlogController
         $posts[uniqid()] = [
             'title' => 'A random title ' . rand(1, 500),
             'text' => 'A random text ' . rand(1, 500),
+            'date' => new \DateTime(),
         ];
 
         $this->session->set('posts', $posts);

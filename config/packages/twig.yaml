@@ -1,2 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    #    passing values to every twig template
+    #    using global parameters from services.yaml
+    globals:
+        message: '%hello_message%'

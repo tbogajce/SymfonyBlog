@@ -4,6 +4,18 @@
 
 {% block body %}
     <p>ID {{ id }}</p>
-    <h3>{{ post.title }}</h3>
+    <h3>{{ post.title|upper }}</h3>
     <p>{{ post.text }}</p>
+    <p>{{ post.date|date('H:i:s') }}</p>
+    <p>{{ 560|price }}</p>
+    <p>Here is the current locale: {{ locale }}</p>
+    {#    message variable from config/packages/twig.yaml#}
+    <p>{{ message }}</p>
+
+    {#    Symfony predefined variables#}
+    {#    <p>Env: {{ app.environment }}</p>#}
+    {#    <p>User: {{ app.user }}</p>#}
+    {#    <p>Request: {{ app.request }}</p>#}
+    {#    <p>Session started: {{ app.session.isStarted() }}</p>#}
+    {#    <p>Debug: {{ app.debug }}</p>#}
 {% endblock %}
