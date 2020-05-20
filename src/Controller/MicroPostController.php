@@ -106,4 +106,25 @@ class MicroPostController
             'form' => $form->createView()
         ]));
     }
+
+    // order of the routes is important because if we put this in front of add route
+    // when we go to /add it would be passed as the id for the post route
+    /**
+     * @Route("/{id}", name="micro_post_post")
+     * @param MicroPost $post
+     * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    // Symfony ParamConverter instead of passing id to the function
+    public function post(MicroPost $post) {
+
+        // param converter is basically doing this and returning one record of type MicroPost
+        // $post = $this->microPostRepository->find($id);
+
+        return new Response($this->twig->render('micro-post/post.html.twig', [
+            'post' => $post
+        ]));
+    }
 }
