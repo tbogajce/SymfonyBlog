@@ -4,3 +4,5 @@ twig:
     #    using global parameters from services.yaml
     globals:
         message: '%hello_message%'
+    #    option for bootstrapping forms
+    form_themes: ['bootstrap_4_layout.html.twig']
