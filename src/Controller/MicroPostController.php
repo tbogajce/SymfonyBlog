@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -43,6 +45,10 @@ class MicroPostController
      * @var RouterInterface
      */
     private $router;
+    /**
+     * @var FlashBagInterface
+     */
+    private $flashBag;
 
     /**
      * MicroPostController constructor.
@@ -51,18 +57,21 @@ class MicroPostController
      * @param FormFactoryInterface $formFactory
      * @param EntityManagerInterface $entityManager
      * @param RouterInterface $router
+     * @param FlashBagInterface $flashBag
      */
     public function __construct(Environment $twig,
                                 MicroPostRepository $microPostRepository,
                                 FormFactoryInterface $formFactory,
                                 EntityManagerInterface $entityManager,
-                                RouterInterface $router) {
+                                RouterInterface $router,
+                                FlashBagInterface $flashBag) {
 
         $this->twig = $twig;
         $this->microPostRepository = $microPostRepository;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
         $this->router = $router;
+        $this->flashBag = $flashBag;
     }
 
 
@@ -71,10 +80,56 @@ class MicroPostController
      */
     public function index() {
         $html = $this->twig->render('micro-post/index.html.twig', [
-            'posts' => $this->microPostRepository->findAll()
+            'posts' => $this->microPostRepository->findBy([], ['time' => 'DESC'])
         ]);
 
         return new Response($html);
+    }
+
+
+    /**
+     * @Route("/edit/{id}", name="micro_post_edit")
+     * @param MicroPost $microPost
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function edit(MicroPost $microPost, Request $request) {
+
+        $form = $this->formFactory->create(MicroPostType::class, $microPost);
+        // this is when validation happens
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            // execute insert queries
+            $this->entityManager->flush();
+
+            return new RedirectResponse($this->router->generate('micro_post_index'));
+        }
+
+        return new Response($this->twig->render('micro-post/add.html.twig', [
+            'form' => $form->createView()
+        ]));
+    }
+
+
+    /**
+     * @Route("/delete/{id}", name="micro_post_delete")
+     * @param MicroPost $microPost
+     * @return RedirectResponse
+     */
+    public function delete(MicroPost $microPost) {
+        $this->entityManager->remove($microPost);
+        // queries are executed only after calling flush()
+        $this->entityManager->flush();
+
+        // add flash message to the session
+        $message = 'Micro post ' . $microPost->getText() . ' deleted';
+        $this->flashBag->add('notice', $message);
+
+        return new RedirectResponse($this->router->generate('micro_post_index'));
     }
 
 
