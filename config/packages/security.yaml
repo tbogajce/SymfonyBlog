@@ -1,23 +1,53 @@
 security:
+    encoders:
+        App\Entity\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+        database_users:
+            entity: { class: App\Entity\User, property: username }
+
+    #        we can use this to add users to the memory
+    #        in_memory:
+    #            memory:
+    #                users:
+    #                    tihi:
+    #                        password: helloTihi
+    #                        roles: 'ROLE_USER'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
-            provider: users_in_memory
+            anonymous: true
+            pattern: ^/
 
             # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # http_basic: ~
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+            # configuration for login form
+            form_login:
+                check_path: security_login
+                login_path: security_login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: micro_post_index
+                # always_use_default_target_path: false
+                # use_referer: true
+                # failure_path:
+                # username_parameter: _username   # this is the default value
+                # password_parameter: _password   # this is the default value
+                # csrf_parameter: _csrf_token   # this is the default value
+
+            logout:
+                path: security_logout
+                target: micro_post_index
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # secure every url that starts with micro-post
+        # - { path: ^/micro-post, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
