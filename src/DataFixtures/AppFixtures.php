@@ -31,8 +31,9 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $this->loadMicroPosts($manager);
+        // order is important because of references
         $this->loadUsers($manager);
+        $this->loadMicroPosts($manager);
     }
 
     private function loadMicroPosts(ObjectManager $manager)
@@ -41,6 +42,8 @@ class AppFixtures extends Fixture
             $microPost = new MicroPost();
             $microPost->setText('Some random text ' . rand(0, 100));
             $microPost->setTime(new \DateTime('2020-05-20'));
+            // add reference from user for relations
+            $microPost->setUser($this->getReference('tihi'));
             $manager->persist($microPost);
         }
 
@@ -56,6 +59,9 @@ class AppFixtures extends Fixture
         // first parameter for encodePassword is UserInterface
         // that is why we needed to implement it in User entity
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'tihisifra'));
+
+        // added for relations
+        $this->addReference('tihi', $user);
 
         $manager->persist($user);
         $manager->flush();

@@ -30,6 +30,13 @@ class MicroPost
      */
     private $time;
 
+    /**
+     * inversed by is used so that we will be able to find all the post by that user
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn()
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,5 +74,20 @@ class MicroPost
         $this->time = $time;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user): void
+    {
+        $this->user = $user;
+    }
 
 }
