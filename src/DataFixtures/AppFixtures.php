@@ -20,18 +20,28 @@ class AppFixtures extends Fixture
             'email' => 'tihi@gmail.com',
             'password' => 'tihisifra',
             'fullName' => 'Tihomir Bogajcevic',
+            'roles' => [User::ROLE_USER]
         ],
         [
             'username' => 'rob_smith',
             'email' => 'rob_smith@smith.com',
             'password' => 'rob12345',
             'fullName' => 'Rob Smith',
+            'roles' => [User::ROLE_USER]
         ],
         [
             'username' => 'marry_gold',
             'email' => 'marry_gold@gold.com',
             'password' => 'marry12345',
             'fullName' => 'Marry Gold',
+            'roles' => [User::ROLE_USER]
+        ],
+        [
+            'username' => 'super_admin',
+            'email' => 'admin@admin.com',
+            'password' => 'admin',
+            'fullName' => 'Super Admin',
+            'roles' => [User::ROLE_ADMIN]
         ],
     ];
 
@@ -39,7 +49,7 @@ class AppFixtures extends Fixture
         'Hello, how are you?',
         'It\'s nice sunny weather today',
         'I need to buy some ice cream!',
-        'I wanna buy a new car',
+        'I wanna buy Honda Civic Type-R',
         'There\'s a problem with my phone',
         'I need to go to the doctor',
         'What are you up to today?',
@@ -99,6 +109,7 @@ class AppFixtures extends Fixture
             // first parameter for encodePassword is UserInterface
             // that is why we needed to implement it in User entity
             $user->setPassword($this->passwordEncoder->encodePassword($user, $userData['password']));
+            $user->setRoles($userData['roles']);
 
             // added for relations
             $this->addReference($userData['username'], $user);

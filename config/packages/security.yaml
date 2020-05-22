@@ -53,3 +53,6 @@ security:
         # secure every url that starts with micro-post
         # - { path: ^/micro-post, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER

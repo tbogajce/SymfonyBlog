@@ -33,7 +33,7 @@ class MicroPost
     /**
      * inversed by is used so that we will be able to find all the post by that user
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
-     * @ORM\JoinColumn()
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 

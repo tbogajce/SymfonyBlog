@@ -20,6 +20,9 @@ class User implements UserInterface, \Serializable
     // CONSOLE COMMAND TO CREATE MIGRATION: php bin/console doctrine:migrations:diff
     // CONSOLE COMMAND TO MIGRATE: php bin/console doctrine:migrations:migrate
 
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -58,6 +61,12 @@ class User implements UserInterface, \Serializable
      * @Assert\Length(min=4, max=50)
      */
     private $fullName;
+
+    /**
+     * @var array
+     * @ORM\Column(type="simple_array")
+     */
+    private $roles;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
@@ -128,9 +137,15 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return [
-            'ROLE_USER'
-        ];
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 
     public function getPassword()

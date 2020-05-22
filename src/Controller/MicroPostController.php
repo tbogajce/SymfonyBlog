@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -109,7 +110,7 @@ class MicroPostController
      */
     public function edit(MicroPost $microPost, Request $request) {
         // we can use this method if we extend AbstractController class
-        //$this->denyUnlessGranted('edit', $microPost);
+        // $this->denyUnlessGranted('edit', $microPost);
 
         if(!$this->authorizationChecker->isGranted('edit', $microPost)) {
             throw new UnauthorizedHttpException();
@@ -153,15 +154,23 @@ class MicroPostController
 
     /**
      * @Route("/add", name="micro_post_add")
+     * @Security("is_granted('ROLE_USER')")
      * @param Request $request
+     * @param TokenStorageInterface $tokenStorage
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function add(Request $request) {
+    public function add(Request $request, TokenStorageInterface $tokenStorage) {
+        // if AbstractController is extended
+        // $user = $this->getUser();
+
+        $user = $tokenStorage->getToken()->getUser();
+
         $microPost = new MicroPost();
         $microPost->setTime(new \DateTime());
+        $microPost->setUser($user);
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
         $form->handleRequest($request);
