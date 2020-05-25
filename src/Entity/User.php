@@ -74,11 +74,31 @@ class User implements UserInterface, \Serializable
     private $posts;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="following")
+     */
+    private $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="followers")
+     * @ORM\JoinTable(name="following",
+     *     joinColumns={
+     *          @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $following;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
     }
 
 
@@ -204,11 +224,30 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return ArrayCollection
+     * @return mixed
      */
-    public function getPosts(): ArrayCollection
+    public function getPosts()
     {
         return $this->posts;
     }
+
+    // we don't create setters for collections
+    /**
+     * @return ArrayCollection
+     */
+    public function getFollowers(): ArrayCollection
+    {
+        return $this->followers;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFollowing(): ArrayCollection
+    {
+        return $this->following;
+    }
+
+
 
 }

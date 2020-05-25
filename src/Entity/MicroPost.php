@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MicroPostRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class MicroPost
 {
@@ -72,6 +73,15 @@ class MicroPost
     public function setTime($time): void
     {
         $this->time = $time;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    // used to set the date before persisting to DB
+    public function setTimeOnPersist(): void
+    {
+        $this->time = new \DateTime();
     }
 
     /**

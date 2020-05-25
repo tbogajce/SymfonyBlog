@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroPost;
+use App\Entity\User;
 use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -169,7 +170,6 @@ class MicroPostController
         $user = $tokenStorage->getToken()->getUser();
 
         $microPost = new MicroPost();
-        $microPost->setTime(new \DateTime());
         $microPost->setUser($user);
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
@@ -188,6 +188,29 @@ class MicroPostController
             'form' => $form->createView()
         ]));
     }
+
+
+    /**
+     * @Route("/user/{username}", name="micro_post_user")
+     * @param User $userWithPosts
+     * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function userPosts(User $userWithPosts) {
+        $html = $this->twig->render('micro-post/index.html.twig', [
+            // we can fetch specific user posts using repository
+            // 'posts' => $this->microPostRepository->findBy(
+            //     ['user' => $userWithPosts],
+            //     ['time' => 'DESC']
+            // )
+            'posts' => $userWithPosts->getPosts()
+        ]);
+
+        return new Response($html);
+    }
+
 
     // order of the routes is important because if we put this in front of add route
     // when we go to /add it would be passed as the id for the post route
