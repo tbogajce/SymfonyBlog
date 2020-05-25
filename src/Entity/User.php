@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -233,17 +234,17 @@ class User implements UserInterface, \Serializable
 
     // we don't create setters for collections
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getFollowers(): ArrayCollection
+    public function getFollowers()
     {
         return $this->followers;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getFollowing(): ArrayCollection
+    public function getFollowing()
     {
         return $this->following;
     }

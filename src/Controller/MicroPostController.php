@@ -199,13 +199,15 @@ class MicroPostController
      * @throws SyntaxError
      */
     public function userPosts(User $userWithPosts) {
-        $html = $this->twig->render('micro-post/index.html.twig', [
+        $html = $this->twig->render('micro-post/user-posts.html.twig', [
             // we can fetch specific user posts using repository
-            // 'posts' => $this->microPostRepository->findBy(
-            //     ['user' => $userWithPosts],
-            //     ['time' => 'DESC']
-            // )
-            'posts' => $userWithPosts->getPosts()
+             'posts' => $this->microPostRepository->findBy(
+                 ['user' => $userWithPosts],
+                 ['time' => 'DESC']
+             ),
+            'user' => $userWithPosts
+
+            // 'posts' => $userWithPosts->getPosts()
         ]);
 
         return new Response($html);
