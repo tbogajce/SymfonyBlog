@@ -28,8 +28,13 @@ class LikesController extends AbstractController
             return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
         }
 
-        $microPost->like($currentUser);
-        $this->getDoctrine()->getManager()->flush();
+        // user is not able to like post where he is the owner
+        if ($microPost->getUser()->getId() !== $currentUser->getId()) {
+            $microPost->like($currentUser);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+
 
         return new JsonResponse([
             'count' => $microPost->getLikedBy()->count()
