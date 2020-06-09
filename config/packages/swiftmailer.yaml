@@ -1,3 +1,11 @@
 swiftmailer:
     url: '%env(MAILER_URL)%'
+    # spooling means that emails are not send immediately (because of performance)
     spool: { type: 'memory' }
+
+#    spool:
+#        type: file
+#        path: '%kernel.project_dir%/var/spool'
+
+#        command to send emails
+#        php bin/console swiftmailer:spool:send --env=prod --message-limit=10

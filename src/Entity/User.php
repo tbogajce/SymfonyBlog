@@ -98,6 +98,16 @@ class User implements UserInterface, \Serializable
     private $postsLiked;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=30)
+     */
+    private $confirmationToken;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -107,6 +117,7 @@ class User implements UserInterface, \Serializable
         $this->following = new ArrayCollection();
         $this->postsLiked = new ArrayCollection();
         $this->roles = [self::ROLE_USER];
+        $this->enabled = false;
     }
 
 
@@ -272,6 +283,35 @@ class User implements UserInterface, \Serializable
         return $this->postsLiked;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
 
+    /**
+     * @param mixed $confirmationToken
+     */
+    public function setConfirmationToken($confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
+    }
 
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled): void
+    {
+        $this->enabled = $enabled;
+    }
 }

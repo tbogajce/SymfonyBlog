@@ -110,6 +110,7 @@ class AppFixtures extends Fixture
             // that is why we needed to implement it in User entity
             $user->setPassword($this->passwordEncoder->encodePassword($user, $userData['password']));
             $user->setRoles($userData['roles']);
+            $user->setEnabled(true);
 
             // added for relations
             $this->addReference($userData['username'], $user);

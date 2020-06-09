@@ -43,7 +43,7 @@ security:
                 # username_parameter: _username   # this is the default value
                 # password_parameter: _password   # this is the default value
                 # csrf_parameter: _csrf_token   # this is the default value
-
+            user_checker: App\Security\UserEnabledChecker
             logout:
                 path: security_logout
                 target: micro_post_index
