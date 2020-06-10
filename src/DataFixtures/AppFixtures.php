@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\MicroPost;
 use App\Entity\User;
+use App\Entity\UserPreferences;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 // this namespace by default is use Doctrine\Common\Persistence\ObjectManager;
 // and it should be changed to this because it throws an error
@@ -56,6 +57,8 @@ class AppFixtures extends Fixture
         'Did you watch the game yesterday?',
         'How was your day?'
     ];
+
+    private const LANGUAGES = ['en', 'fr'];
 
     /**
      * @var UserPasswordEncoderInterface
@@ -114,6 +117,11 @@ class AppFixtures extends Fixture
 
             // added for relations
             $this->addReference($userData['username'], $user);
+
+            $preferences = new UserPreferences();
+            $preferences->setLocale(self::LANGUAGES[rand(0, 1)]);
+
+            $user->setPreferences($preferences);
 
             $manager->persist($user);
         }
