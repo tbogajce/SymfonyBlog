@@ -33,8 +33,10 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "phpunit/phpunit": "7",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.18",
+        "symfony/phpunit-bridge": "^5.1",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*"
     },
